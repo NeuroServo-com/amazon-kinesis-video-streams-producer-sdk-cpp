@@ -34,7 +34,9 @@ get_filename_component(ROOT "${CMAKE_CURRENT_SOURCE_DIR}" ABSOLUTE)
 
 # static settings
 if(BUILD_STATIC)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+  if(UNIX AND NOT APPLE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+  endif()
   set(LINKAGE STATIC)
 elseif(WIN32)
   set(LINKAGE STATIC)
@@ -77,7 +79,7 @@ if(BUILD_DEPENDENCIES)
     build_dependency(autoconf)
     build_dependency(automake)
   endif()
-  
+
   if(BUILD_LOG4CPLUS_HOST)
     set(BUILD_ARGS -DBUILD_LOG4CPLUS_HOST=${BUILD_LOG4CPLUS_HOST})
     build_dependency(log4cplus ${BUILD_ARGS} -DBUILD_STATIC=${BUILD_STATIC})
@@ -218,8 +220,14 @@ if(BUILD_GSTREAMER_PLUGIN)
     add_library(gstkvssink STATIC ${GST_PLUGIN_SOURCE_FILES})
   else()
     add_library(gstkvssink MODULE ${GST_PLUGIN_SOURCE_FILES})
+
+    if(APPLE)
+      set_target_properties(gstkvssink PROPERTIES SUFFIX ".dylib")
+    endif()
   endif()
   target_link_libraries(gstkvssink PRIVATE ${GST_APP_LIBRARIES} KinesisVideoProducer)
+
+  install(TARGETS gstkvssink DESTINATION lib)
 
   add_executable(kvssink_gstreamer_sample samples/kvssink_gstreamer_sample.cpp)
   target_link_libraries(kvssink_gstreamer_sample ${GST_APP_LIBRARIES} KinesisVideoProducer)
