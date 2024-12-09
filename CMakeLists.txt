@@ -219,30 +219,28 @@ if(BUILD_GSTREAMER_PLUGIN)
   if(BUILD_STATIC)
     add_library(gstkvssink STATIC ${GST_PLUGIN_SOURCE_FILES})
   else()
-    add_library(gstkvssink MODULE ${GST_PLUGIN_SOURCE_FILES})
-
-    if(APPLE)
-      set_target_properties(gstkvssink PROPERTIES SUFFIX ".dylib")
-    endif()
+    add_library(gstkvssink SHARED ${GST_PLUGIN_SOURCE_FILES})
   endif()
+
+  # add_library(gstkvssink SHARED ${GST_PLUGIN_SOURCE_FILES})
   target_link_libraries(gstkvssink PRIVATE ${GST_APP_LIBRARIES} KinesisVideoProducer)
 
   install(TARGETS gstkvssink DESTINATION lib)
 
-  add_executable(kvssink_gstreamer_sample samples/kvssink_gstreamer_sample.cpp)
-  target_link_libraries(kvssink_gstreamer_sample ${GST_APP_LIBRARIES} KinesisVideoProducer)
+  # add_executable(kvssink_gstreamer_sample samples/kvssink_gstreamer_sample.cpp)
+  # target_link_libraries(kvssink_gstreamer_sample ${GST_APP_LIBRARIES} KinesisVideoProducer)
 
-  add_executable(kvs_gstreamer_sample samples/kvs_gstreamer_sample.cpp)
-  target_link_libraries(kvs_gstreamer_sample ${GST_APP_LIBRARIES} KinesisVideoProducer kvspic)
+  # add_executable(kvs_gstreamer_sample samples/kvs_gstreamer_sample.cpp)
+  # target_link_libraries(kvs_gstreamer_sample ${GST_APP_LIBRARIES} KinesisVideoProducer kvspic)
 
-  add_executable(kvs_gstreamer_multistream_sample samples/kvs_gstreamer_multistream_sample.cpp)
-  target_link_libraries(kvs_gstreamer_multistream_sample ${GST_APP_LIBRARIES} KinesisVideoProducer)
+  # add_executable(kvs_gstreamer_multistream_sample samples/kvs_gstreamer_multistream_sample.cpp)
+  # target_link_libraries(kvs_gstreamer_multistream_sample ${GST_APP_LIBRARIES} KinesisVideoProducer)
 
-  add_executable(kvs_gstreamer_audio_video_sample samples/kvs_gstreamer_audio_video_sample.cpp)
-  target_link_libraries(kvs_gstreamer_audio_video_sample ${GST_APP_LIBRARIES} KinesisVideoProducer)
+  # add_executable(kvs_gstreamer_audio_video_sample samples/kvs_gstreamer_audio_video_sample.cpp)
+  # target_link_libraries(kvs_gstreamer_audio_video_sample ${GST_APP_LIBRARIES} KinesisVideoProducer)
 
-  add_executable(kvs_gstreamer_file_uploader_sample samples/kvs_gstreamer_file_uploader_sample.cpp)
-  target_link_libraries(kvs_gstreamer_file_uploader_sample ${GST_APP_LIBRARIES})
+  # add_executable(kvs_gstreamer_file_uploader_sample samples/kvs_gstreamer_file_uploader_sample.cpp)
+  # target_link_libraries(kvs_gstreamer_file_uploader_sample ${GST_APP_LIBRARIES})
 endif()
 
 if(BUILD_TEST)
